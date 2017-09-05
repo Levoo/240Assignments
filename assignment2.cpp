@@ -64,3 +64,33 @@ int main()
     return 0;
 }
 
+void part2() {
+	
+	int number, total, h = 100, t = 10, r;
+
+	std::cout << "Enter a 3 digit number: ";
+	std::cin >> number;
+
+	_asm {
+		mov eax, number;
+		cdq;
+
+		idiv h;
+
+		mov total, eax;
+
+		mov r, edx;
+		mov eax, r
+		cdq;
+
+		idiv t;
+
+		add total, eax;
+
+		add total, edx;
+
+	}
+
+	std::cout << total;
+}
+
