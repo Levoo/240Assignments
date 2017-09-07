@@ -202,15 +202,10 @@ int main()
 }
 	
 // -----------------------------------------------------------------------------------------------
-	//print the menu
+
 	 
-
-    return 0;
-}
-
-void part2() {
-	
-	int number, total, h = 100, t = 10, r;
+//-------------------------------QUESTION 4-----------------------------------------------
+	int number, total, hun = 100, t = 10, r;
 
 	std::cout << "Enter a 3 digit number: ";
 	std::cin >> number;
@@ -219,13 +214,13 @@ void part2() {
 		mov eax, number;
 		cdq;
 
-		idiv h;
+		idiv hun;
 
 		mov total, eax;
 
 		mov r, edx;
 		mov eax, r
-		cdq;
+			cdq;
 
 		idiv t;
 
@@ -235,6 +230,11 @@ void part2() {
 
 	}
 
-	std::cout << total;
+	std::cout << "The total of the digits in " << number << " is " << total << "\n";
+
+
+    return 0;
 }
+
+
 
