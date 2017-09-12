@@ -187,3 +187,51 @@ void displayXYMenu() {
 void printXYresults() {
 	std::cout << "\tX = " << X << "\n\tY = " << Y << std::endl;
 }
+
+
+/*almost done part 3 
+#include <iostream>
+  
+char c;
+int lCount, uCount;
+
+void getNextChar(){
+	std::cin.get(c);
+}
+
+void displayCount(){
+	std::cout << "Total Lower == " << lCount << "\nTotal Upper == " << uCount << std::endl;
+}
+  
+  
+int main(){
+	std::cout << "Enter a sentence: ";
+	
+	_asm{
+	whileLoop:
+				call getNextChar
+	
+				cmp c, '\n'
+				je done
+				cmp c, 'A'
+				jle whileLoop
+				jge isUpper
+
+	isUpper:
+				cmp c,'Z'
+				jge possibleLower
+				inc uCount
+				jmp whileLoop
+	
+	possibleLower:
+				cmp c, 'a'
+				jle whileLoop
+				cmp c, 'z'
+				jle 
+				
+	done:
+		call displayCount
+	}
+
+}
+*/
