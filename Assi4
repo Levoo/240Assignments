@@ -1,0 +1,77 @@
+/*
+Author: Fernando Cuevas
+Class : CPSC 240
+Assignment: Quiz 3 
+Due: 09/14/2017
+*/
+
+#include <iostream>
+
+//q 1
+
+int cYesVotes = 0, cNoVotes = 0, i = 0, voteCount = 0;
+char c;
+
+void promptVotes() {
+	std::cout << "Enter a string of votes: ";
+}
+
+void getVotes() {
+	std::cin.get(c);
+	voteCount++;
+}
+
+void printVotes() {
+	std::cout << "No. of YES votes = " << cYesVotes;
+	for (int i = 0; i < cYesVotes; i++) {
+		std::cout << " * ";
+	}
+	std::cout << std::endl;
+
+	std::cout << "No. of NO votes = " << cNoVotes;
+	for (int i = 0; i < cNoVotes; i++) {
+		std::cout << " * ";
+	}
+	std::cout << std::endl;
+}
+
+int main() {
+
+	_asm {
+			call promptVotes;
+		
+		whileLoop:
+			
+			call getVotes;
+			cmp c, '\n';
+			je ForLoop;
+
+			cmp c, 'y';
+			jne noVote;
+
+		yesVote:
+			inc cYesVotes;
+			jmp whileLoop;
+
+		noVote:
+			inc cNoVotes;
+			jmp whileLoop;
+
+		Forloop:
+			cmp i, voteCount;
+
+	}
+
+	return 0;
+	
+}
+
+/*------------------------OUTPUT----------------------------
+
+Enter a string of votes: ynnyynyyyy
+No. of YES votes = 7 *  *  *  *  *  *  *
+No. of NO votes = 3 *  *  *
+Press any key to continue . . .
+
+----------------------------------------------------------------*/
+
