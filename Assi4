@@ -18,21 +18,23 @@ void promptVotes() {
 
 void getVotes() {
 	std::cin.get(c);
-	voteCount++;
 }
 
-void printVotes() {
+void printYesVotes() {
 	std::cout << "No. of YES votes = " << cYesVotes;
-	for (int i = 0; i < cYesVotes; i++) {
-		std::cout << " * ";
-	}
-	std::cout << std::endl;
 
+}
+
+void printYesVoteStars() {
+	std::cout << " * ";
+}
+
+void printNoVotes() {
 	std::cout << "No. of NO votes = " << cNoVotes;
-	for (int i = 0; i < cNoVotes; i++) {
-		std::cout << " * ";
-	}
-	std::cout << std::endl;
+}
+
+void printNoVoteStars() {
+	std::cout << " * ";
 }
 
 int main() {
@@ -51,14 +53,26 @@ int main() {
 
 		yesVote:
 			inc cYesVotes;
+			inc voteCount;
 			jmp whileLoop;
 
 		noVote:
 			inc cNoVotes;
+			inc voteCount;
 			jmp whileLoop;
 
+		call printYesVotes;
+		mov eax, voteCount;
+
 		Forloop:
-			cmp i, voteCount;
+			cmp i, eax;
+			jge done;
+
+			call printYesVoteStars;
+			inc i;
+			jmp Forloop;
+
+		done:
 
 	}
 
