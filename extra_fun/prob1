@@ -1,0 +1,118 @@
+/*
+Author: Cuevas, Fernando
+Class: 240
+Quiz: 5
+Date: 09/21/2017
+*/
+
+#include <iostream>
+
+
+//global variables
+char c = ' ', cont, empty = NULL;
+
+// Functions 
+
+void promptUser() {
+	std::cout << "Enter a sentence:";
+}
+
+void getNextChar() {
+	std::cin.get(c);
+}
+
+void displayOutput() {
+	std::cout << "  Output: ";
+}
+
+void displayChar() {
+	std::cout << c;
+}
+
+void promptToCont() {
+	std::cout << "Continue(y/n)? ";
+	std::cin >> cont;  //add a cin.ignore here 
+}
+
+void newLine() {
+	std::cout << std::endl;
+}
+
+void clearInput() {
+	std::cin.ignore();
+}
+
+//Main
+
+int main() {
+
+	_asm {
+		; call promptUser;
+			
+	doWhile:;
+		call promptUser;
+		jmp display;
+			
+		upperCase:;
+			cmp c, '\n';
+			je done;
+			cmp c, ' ';
+			je skipSpaceLower;
+			mov al, c;
+			sub al, 32;
+			mov c, al;
+			call displayChar;
+			call getNextChar;
+
+			jmp lowerCase;
+		
+		skipSpaceUpper:;
+			call displayChar;
+			call getNextChar;
+			jmp lowerCase;
+
+		lowerCase:;
+			cmp c, '\n';
+			je done;
+			cmp c, ' ';
+			je skipSpaceUpper;
+			call displayChar;
+			call getNextChar;
+			
+			jmp upperCase;
+
+		skipSpaceLower:;
+			call displayChar;
+			call getNextChar;
+			jmp upperCase;
+
+		display:
+			call getNextChar;
+			call displayOutput;  error here were it prints all on same line...
+			jmp upperCase;
+
+
+		done : ;
+			call newLine;
+			call promptToCont;
+			cmp cont, 'y';
+			je clearStream;
+
+		clearStream:;
+			call clearInput;
+			jmp doWhile;
+	}
+
+	return 0;
+}
+
+/*-----------------------OUTPUT-----------------------------------
+
+Enter a sentence:hope for the best
+Output: HoPe FoR tHe BeSt
+Continue(y/n)? y
+Enter a sentence:  Output:
+Continue(y/n)? n
+Press any key to continue . . .
+
+-------------------------OUTPUT-----------------------------------*/
