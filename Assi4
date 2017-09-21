@@ -386,6 +386,30 @@ int main(){
 
 /*-------------------------OUTPUT----------------------------
 
-
+-------------------Practice Addition & Subtraction------------------------
+ a.  Practice Addition
+ b.  Practive Subtraction
+        Enter your choice(a/b): a
+            48 + 49 = 97
+              RIGHT! :D
+              Continue(y/n)? y
+            89 + 83 = 45
+              WRONG! D:
+              Continue(y/n)? N
+        No. of CORRECT answers = 1
+        No. of WRONG answers   = 1
+  Are you done(y/n)? n
+        Enter your choice(a/b): b
+            66 - 31 = 35
+              RIGHT! :D
+              Continue(y/n)? y
+            43 - 19 = 24
+              RIGHT! :D
+              Continue(y/n)? n
+        No. of CORRECT answers = 2
+        No. of WRONG answers   = 0
+  Are you done(y/n)? y
+   Have a nice day!
+Press any key to continue . . .
 
 -------------------------------------------------------------*/
