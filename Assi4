@@ -1,11 +1,12 @@
-/*
 Author: Fernando Cuevas
 Class : CPSC 240
-Assignment: Quiz 3 
-Due: 09/14/2017
+Assignment: 4
+Due: 09/21/2017
 */
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 //q 1
 
@@ -20,64 +21,78 @@ void getVotes() {
 	std::cin.get(c);
 }
 
-void printYesVotes() {
+void printYesVote() {
+	
 	std::cout << "No. of YES votes = " << cYesVotes;
 
-}
-
-void printYesVoteStars() {
-	std::cout << " * ";
 }
 
 void printNoVotes() {
 	std::cout << "No. of NO votes = " << cNoVotes;
 }
 
-void printNoVoteStars() {
+void printStars() {
 	std::cout << " * ";
+}
+
+void printNewLine() {
+	std::cout << "\n";
 }
 
 int main() {
 
 	_asm {
-			call promptVotes;
-		
-		whileLoop:
-			
-			call getVotes;
-			cmp c, '\n';
-			je ForLoop;
+		call promptVotes;
+		mov eax, 0;
+	whileLoop:
 
-			cmp c, 'y';
-			jne noVote;
+		call getVotes;				while loop will go through each char in the string
+		cmp c, '\n';				the user put and if yes then inc yes count else inc no count
+		je  endWhileLoop;			once the end of the line is reached then jump out of the loop
+		;							and then go through the for loops
+		cmp c, 'y';
+		jne noVote;
 
-		yesVote:
-			inc cYesVotes;
-			inc voteCount;
-			jmp whileLoop;
+	yesVote:
+		inc cYesVotes;
+		inc voteCount;
+		jmp whileLoop;
 
-		noVote:
-			inc cNoVotes;
-			inc voteCount;
-			jmp whileLoop;
+	noVote:
+		inc cNoVotes;
+		inc voteCount;
+		jmp whileLoop;
+	
+	endWhileLoop:
+	
+		call printYesVote;
 
-		call printYesVotes;
-		mov eax, voteCount;
+		mov ebx, 0;					ebx will act as out counter in the loop which will comapre with yes count and no count
+	yesloop :	                  ; the yes count will loop printing the stars until the end of the count is reach
+		cmp ebx, cYesVotes;			once that happens it will exit
+		je endYesLoop;
+		call printStars;
+		inc ebx;
+		jmp yesloop;
+	
+	endYesLoop:
+		call printNewLine;
+		call printNoVotes;
+		mov ebx, 0;
 
-		Forloop:
-			cmp i, eax;
-			jge done;
+	noloop:
+		cmp ebx, cNoVotes;
+		je done;
+		call printStars;
+		inc ebx;
+		jmp noloop;
 
-			call printYesVoteStars;
-			inc i;
-			jmp Forloop;
-
-		done:
-
+	done:
+		call printNewLine;
 	}
 
 	return 0;
-	
+
 }
 
 /*------------------------OUTPUT----------------------------
@@ -89,3 +104,288 @@ Press any key to continue . . .
 
 ----------------------------------------------------------------*/
 
+//q 2
+
+char letter;
+
+void getInput() {
+	std::cout << "Enter a sentence: ";
+	std::cin.get(letter);
+}
+
+void getNextChar() {
+	std::cin.get(letter);
+}
+
+void formatOuput() {
+	std::cout << "  Output: ";
+}
+
+void displayChar() {
+	std::cout << letter;
+}
+
+void newLine(){
+	std::cout << std::endl;
+}
+
+int main() {
+	
+	_asm {
+		; loop through user inputed sentence and then print out to console upper case vowel
+		; if letter is vowel else just print out the letter
+
+		call getInput;
+		call formatOuput;
+	whileLoop:
+			mov al, letter;
+			cmp al, '.';
+			je done;
+			cmp al, '\n';   to amke sure out program does not break during testing 
+			je done;
+
+			cmp al, 97;					a, e, i, o, u and somtimes y
+			je changeUpper;
+
+			cmp al, 101;
+			je changeUpper;
+
+			cmp al, 105;
+			je changeUpper;
+
+			cmp al, 111;
+			je changeUpper;
+
+			cmp al, 117;
+			je changeUpper;
+
+			cmp al, 121;
+			je changeUpper;
+
+			call displayChar;				print char if it is not a vowel
+			call getNextChar;
+			jmp whileLoop;				if not one of these loop back
+
+		changeUpper:
+			sub al, 32;
+			mov letter, al;
+			call displayChar;
+			call getNextChar;
+			jmp whileLoop; 
+		
+		done:
+			call displayChar;
+			call newLine;
+
+	}
+	
+
+	return 0;
+}
+
+/*---------------------------OUTPUT------------------------------------
+
+Enter a sentence: proud is self-respect.
+Output: prOUd Is sElf-rEspEct.
+Press any key to continue . . .
+
+-----------------------------------------------------------------------*/
+
+//q 3
+int x, y, userAnswer, correctAnswer, cCorrect, cWrong;
+char menuChoice, continueChoice, choiceIsDone;
+
+//---------------------------------
+void printMenu() {
+	std::cout << "-------------------Practice Addition & Subtraction------------------------\n";
+	std::cout << " a.  Practice Addition\n";
+	std::cout << " b.  Practive Subtraction\n";
+}
+
+void promptMenuChoice() {
+	std::cout << "\tEnter your choice(a/b): ";
+	std::cin >> menuChoice;
+}
+
+//-------------------------------------------
+
+void randomNumbers() {
+	x = rand() % 99 + 1;
+	y = rand() % 99 + 1;
+
+}
+
+void promptAdditionAnswer() {
+	std::cout << "\t    " << x << " + " << y << " = ";
+	correctAnswer = x + y;
+} 
+
+void promptSubtractionAnswer() {
+	std::cout << "\t    " << x << " - " << y << " = ";
+	correctAnswer = x - y;
+}
+
+void getMathAnswer() {
+	std::cin >> userAnswer;
+}
+
+//---------------------------------------------
+void askToCont() {
+	std::cout << "\n\t      Continue(y/n)? ";
+	std::cin >> continueChoice;
+}
+
+void displayRight() {
+	std::cout << "\t      RIGHT! :D";
+}
+
+void displayWrong() {
+	std::cout << "\t      WRONG! D:";
+}
+
+void answerCount() {
+	std::cout << "\tNo. of CORRECT answers = " << cCorrect << "\n\tNo. of WRONG answers   = " << cWrong;
+}
+//-----------------------------------------------
+void askIfDone() {
+	std::cout << "\n  Are you done(y/n)? ";
+	std::cin >> choiceIsDone;
+}
+
+void exitMsg() {
+	std::cout << "   Have a nice day!\n";
+}
+
+
+int main(){
+	srand(time(NULL)); //sead for random number
+
+	_asm {  //-------!!!!!!!!!!!!!-----------NEED TO ADD TO CHECK FOR CAPITAL N AND Y---------------!!!!!!!!!!!!!!!!!!!---------------
+		call printMenu;
+	doWhile:
+		call promptMenuChoice;
+
+		cmp menuChoice, 'a';
+		jne practiceSubtraction;
+
+	practiceAddition:;							if choice is a  then addition else subtraction
+		call randomNumbers;						call for user input
+		call promptAdditionAnswer;
+		call getMathAnswer;
+
+		mov eax, correctAnswer;					check answer
+
+		cmp eax, userAnswer;
+		jne incorectAddition;
+
+	correctAddition:;				if answer is correct
+		inc cCorrect;						increment correct counter and then check if user is done
+		call displayRight;
+		call askToCont;
+		
+		mov bl, continueChoice;
+
+		cmp bl, 'n';
+		je isUserDone;						move to check if they are done altogether
+
+		cmp bl, 'N';
+		je isUserDone;
+
+		cmp bl, 'y';
+		je practiceAddition;
+
+		cmp bl, 'Y';
+		je practiceAddition;
+
+
+	incorectAddition:;		same logi for the rest of the labels
+		inc cWrong;
+		call displayWrong;
+		call askToCont;
+
+		mov bl, continueChoice;
+
+		cmp bl, 'n';
+		jne isUserDone;
+
+		cmp bl, 'N';
+		jne isUserDone;
+
+		cmp bl, 'y';
+		je practiceAddition;
+		cmp bl, 'Y';
+		je practiceAddition;
+		
+
+	practiceSubtraction:
+		call randomNumbers;
+		call promptSubtractionAnswer;
+		call getMathAnswer;
+
+		mov eax, correctAnswer;
+
+		cmp eax, userAnswer;
+		jne incorectSubtraction;
+
+	correctSubtraction:
+		inc cCorrect;
+		call displayRight;
+		call askToCont;
+
+		mov bl, continueChoice;
+
+		cmp bl, 'n';
+		je isUserDone;
+		cmp bl, 'N';
+		je isUserDone;
+
+		cmp bl, 'y';
+		je practiceSubtraction;
+
+		cmp bl, 'Y';
+		je practiceSubtraction;
+
+
+	incorectSubtraction:
+		inc cWrong;
+		call displayWrong;
+		call askToCont;
+
+		mov bl, continueChoice;
+
+		cmp bl, 'n';
+		je isUserDone;
+		cmp bl, 'N';
+		je isUserDone;
+
+		cmp bl, 'y';
+		je practiceSubtraction;
+
+		cmp bl, 'Y';
+		je practiceSubtraction;
+
+	isUserDone:
+		call answerCount;					display there stats and ask if they are truley done
+		call askIfDone;
+
+		mov cCorrect, 0;					zero out the counter
+		mov cWrong, 0;
+
+		cmp choiceIsDone, 'y';				if they are done then exit else go back to top and 
+		jne doWhile;						got hrough this again
+		jmp done;
+
+
+	done:
+		call exitMsg;
+		
+	}
+	
+	return 0;
+}
+
+/*-------------------------OUTPUT----------------------------
+
+
+
+-------------------------------------------------------------*/
