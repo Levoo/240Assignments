@@ -181,6 +181,13 @@ int main()
 	}*/
 
 	//q3
+	_asm{
+	// display binary in notes
+	// in notes, check each bit if 1 inc on if 0 print pos and then sub pos, say pos = 16
+	// and if 0 not pos amd sub pos
+	}
+	
+	//q4  same but with elevator
 
     return 0;
 }
