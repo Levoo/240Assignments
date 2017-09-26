@@ -73,7 +73,7 @@ int main()
 		and cFloppy, ax;
 		shr cFloppy, 7;
 	grtRAM:
-		mov cRAM, 0000000000001100b;
+		mov cRAM, 0000000000001100b; issue with ram get 3 instead of 64 ask proff
 		and cRAM, ax;
 		shr cRAM, 1;
 
