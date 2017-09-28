@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-//q1
+//q1 variables and functions 
 short rightMove = 14;
 short cPrinter, cFloppy, cRAM;
 
@@ -14,7 +14,7 @@ void printCompInfo() {
 		      << std::endl;
 }
 
-//q2
+//q2 variables and functions 
 
 short beefCount, fadeCount, cabeCount, isEven = 2;
 short checkBeef, checkFade, checkCabe;
@@ -43,19 +43,49 @@ void displayCabeNot() {
 	std::cout << "CABE is not a Valid ID for the Family" << std::endl;
 }
 
-//q3
-short totalOn;
+//q3 variables and functions 
+short totalOn = 0, bitCount = 15;
+short t, n;
 
-void displayAX() {
+void displayAX() { //used for both 3 and 4
+	std::cout << "AX = ";
+	unsigned short x = 1 << 15; //x = 1000 0000 0000 0000
+	for (int i = 1; i <= 16; ++i) {
+		t = n & x;
+		if (t == 0) 
+			std::cout << '0';
+		else  
+			std::cout << '1';
 
+		if (i % 4 == 0) 
+			std::cout << ' ';
+
+		n = n << 1;
+	}
+	std::cout << std::endl;
 }
 
 void howManyOn() {
-
+	std::cout << totalOn << " sprinklers are ON\n";
 }
 
 void defectiveSprinkler() {
+	std::cout << "Defective Sprinklers: ";
+}
 
+void getDefectiveSprinkler() {
+	std::cout << bitCount + 1 << " ";
+}
+
+
+//q4
+short floorStops = 15;
+void eleStop() {
+	std::cout << "Elevator will stop at floors No. ";
+}
+
+void getFloor() {
+	std::cout << floorStops + 1 << " ";
 }
 
 
@@ -71,12 +101,37 @@ int main()
 	getFloppy:
 		mov cFloppy, 0000000001100000b;
 		and cFloppy, ax;
-		shr cFloppy, 7;
+		shr cFloppy, 6;
+		add cFloppy, 1;
 	grtRAM:
-		mov cRAM, 0000000000001100b; issue with ram get 3 instead of 64 ask proff
+		mov cRAM, 0000000000001100b;
 		and cRAM, ax;
-		shr cRAM, 1;
+		shr cRAM, 2;
 
+		cmp cRAM, 00b;
+		je sixteenRAM;
+
+		cmp cRAM, 01b;
+		je thirtytwoRAM;
+
+		cmp cRAM, 10b;
+		je fourtyeightRAM;
+
+		cmp cRAM, 11b;
+		je sixtyfourRAM;
+	
+	sixteenRAM:
+		mov cRAM, 16;
+		jmp done;
+
+	thirtytwoRAM:
+		mov cRAM, 32;
+		jmp done;
+	fourtyeightRAM:
+		mov cRAM, 48;
+		jmp done;
+	sixtyfourRAM:
+		mov cRAM, 64;
 	done:
 		call printCompInfo;
 	}*/
@@ -181,13 +236,114 @@ int main()
 	}*/
 
 	//q3
-	_asm{
-	// display binary in notes
-	// in notes, check each bit if 1 inc on if 0 print pos and then sub pos, say pos = 16
-	// and if 0 not pos amd sub pos
-	}
+	/*_asm {
+		mov n, 0110101000101111b; 
+		call displayAX;
+
+		mov n, 0110101000101111b;
+		mov ax, 1;
+		shl ax, 15;
+
+	forLoop:
+		cmp bitCount, -1;
+		je done;
+
+		and ax, n;
+		cmp ax, 0;
+		jne isOn;
+		jmp isOff;
+
+	isOn:
+		inc totalOn;
+		shl n, 1;
+		dec bitCount;
+		mov ax, 1;
+		shl ax, 15;
+		jmp forLoop;
 	
-	//q4  same but with elevator
+	isOff:
+		dec bitCount;
+		shl n, 1;
+		mov ax, 1;
+		shl ax, 15;
+		jmp forLoop;
+
+	done:
+		call howManyOn;
+	}
+
+	_asm {
+
+		mov n, 0110101000101111b;
+		mov bx, 1;
+		shl bx, 15;
+		mov bitCount, 15;
+		call defectiveSprinkler;
+
+	forLoop2:
+
+		cmp bitCount, -1;
+		je done2;
+
+		and bx, n;
+		cmp bx, 0;
+		jne isOn2;
+		jmp isOff2;
+
+	isOn2:
+		shl n, 1;
+		dec bitCount;
+		mov bx, 1;
+		shl bx, 15;
+		jmp forLoop2;
+
+	isOff2:
+		call getDefectiveSprinkler;
+		dec bitCount;
+		shl n, 1;
+		mov bx, 1;
+		shl bx, 15;
+		jmp forLoop2;
+
+	done2:
+	}
+	std::cout << std::endl;*/
+	
+	//q4
+	_asm{
+		mov n, 1001000100001100b;
+		call displayAX;
+		call eleStop;
+		mov n, 1001000100001100b;
+		mov ax, 1;
+		shl ax, 15;
+	forLoop:
+		cmp floorStops, -1;
+		je done;
+
+		and ax, n;
+		cmp ax, 0;
+		jne stopOnThisFloor;
+		jmp notThisFloor;
+
+	stopOnThisFloor:
+		call getFloor;
+		dec floorStops;
+		shl n, 1;
+		mov ax, 1;
+		shl ax, 15;
+		jmp forLoop;
+	
+	notThisFloor:
+		dec floorStops;
+		shl n, 1;
+		mov ax, 1;
+		shl ax, 15;
+		jmp forLoop;
+
+	done:
+	}
+	std::cout << std::endl;
 
     return 0;
 }
