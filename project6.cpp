@@ -38,6 +38,15 @@ int loop1Count = 0, loop2Count, index, nextIndex, element;
 
 // to display the array i get an error when i try to display within assembly after moving the first value into element the value 
 // of ecx changes dramatically which leads to a crash, possible somthing with the call.
+
+void outputOG() {
+	std::cout << "Original array: ";
+}
+
+void outputSortedTxt() {
+	std::cout << "Sorted array: ";
+}
+
 void displayArray() {
 	for (int i = 0; i < 5; i++) {
 		std::cout << aa[i] << " ";
@@ -50,7 +59,7 @@ void displayMsg_Original() {
 }
 
 //-------------------------QUESTION 3 stuff---------------------
-int aaa[3][3][2] = { 1, 2, 3,
+int a3D[3][3][2] = { 1, 2, 3,
 					 4, 5, 6,
 					 7, 8, 9,
 					 10, 11, 12,
@@ -64,14 +73,22 @@ void displayTotal3DCount() {
 	std::cout << "a.) Total # of shirts is: " << total3DShirtCount << std::endl;
 }
 
-void displayTOtalMed() {
+void display3DTOtalMed() {
 	std::cout << "b.) Total # of shirts is: " << total3DMediumCount << std::endl;
+}
+
+void display3DTotalSHort() {
+	std::cout << "c.) Total # of short sleeves: " << total3DShortSleeve << std::endl;
+}
+
+void display3DTotalRed() {
+	std::cout << "d.) Total # of red shirts: " << total3DReadShirtCount << std::endl;
 }
 
 int main() {
 	//part a of 1
+	std::cout << "\n\tT-shirt Company\n";
 
-	/*std::cout << "T-shirt Company\n";
 	_asm {
 		mov ecx, 0;
 		mov arrayLoc, 0;
@@ -118,14 +135,16 @@ int main() {
 
 	done3:
 		call displayBlackCount;
-	}*/
+	}
 
 
 	//----------------------------------------------------
 
 	//part 2
+	std::cout << "\n\tArray ASM Bubble sort\n";
 	
-	/*_asm {
+	_asm {
+		call outputOG;
 		call displayArray;
 		mov ecx, 0;
 		mov loop1Count, 0;
@@ -168,15 +187,20 @@ int main() {
 		jmp b_Sort;
 		
 	display:
+		call outputSortedTxt;
 		call displayArray;
-	}*/
+	}
+
+	//----------------------------------------------------
 
 	//part 3
+
 	// a./ total shirts
 	// b.) medium size shirts
 	// c.) short sleeve shirts
 	// d.) red shirts
 
+	std::cout << "\n\t3-D array\n";
 	//part a
 	_asm {
 		mov ecx, 0;
@@ -185,7 +209,7 @@ int main() {
 		cmp arrayPos, 18;
 		je donney;
 
-		mov ebx, [aaa + ecx];
+		mov ebx, [a3D + ecx];
 		add total3DShirtCount, ebx;
 
 		add ecx, 4;
@@ -207,10 +231,10 @@ int main() {
 		cmp arrayLoc, 3;
 		je doobi;
 
-		mov ebx, [aaa + ecx];
+		mov ebx, [a3D + ecx];
 		add total3DMediumCount, ebx;
 
-		mov ebx, [aaa + ecx + 4];
+		mov ebx, [a3D + ecx + 4];
 		add total3DMediumCount, ebx;
 
 		mov eax, 8; 
@@ -222,8 +246,77 @@ int main() {
 		jmp loppi;
 
 	doobi:
-		call displayTOtalMed;
+		call display3DTOtalMed;
+
+	}
+
+	//part c
+	_asm {
+		mov eax, 8;
+		mov arrayLoc, 0;
+	loodi:
+		cmp arrayLoc, 9;
+		je don;
+
+		imul arrayLoc;
+		mov ecx, eax;
+		mov eax, 8;
+		inc arrayLoc;
+
+		mov ebx, [a3D + ecx];
+		add total3DShortSleeve, ebx;
+
+		jmp loodi;
+
+	don:
+		call display3DTotalSHort
+
+
+	}
+	
+	//part d
+
+	_asm {
+		mov ecx, 0;
+		mov arrayLoc, 0;
+
+	lupper:
+		cmp arrayLoc, 6;
+		je duubi;
+
+		mov ebx, [a3D + ecx];
+
+		add total3DReadShirtCount, ebx;
+
+		inc arrayLoc;
+		add ecx, 4;
+
+		jmp lupper;
+	
+	duubi:
+		call display3DTotalRed;
 
 	}
 	return 0;
 }
+
+/*-------------------------------OUTPUT FOR ALL--------------------------
+
+
+	T-shirt Company
+a.) Total # of shirts is:    355
+b.) Total # of large shirts: 110
+c.) Total # of black shirts: 90
+
+	Array ASM Bubble sort
+Original array: 9 3 22 8 1
+Sorted array: 3 8 9 22 1
+
+	3-D array
+a.) Total # of shirts is: 171
+b.) Total # of shirts is: 57
+c.) Total # of short sleeves: 81
+d.) Total # of red shirts: 21
+Press any key to continue . . .
+
+-------------------------------OUTPUT FOR ALL--------------------------*/
