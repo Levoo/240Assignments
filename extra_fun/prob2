@@ -1,0 +1,100 @@
+/*
+	Author: Fernando Cuevas
+	Assignment: 6Q
+	Date: 10/5/2017
+	Class: CPSC 240
+*/
+
+#include <iostream>
+
+//variables and functions used 
+int a[3][3] = { 1, 2, 3,  // a + 0, a + 4, a + 8
+				4, 5, 6,  // a + 12, a + 16, a + 20
+			    7, 8, 9}; // a + 24, a + 28, a + 32
+//correct output should be i.) 45 and b.) true are equal both d1 and d2 are 15
+
+int arraySum, DiagnalSum1, DiagnalSum2;
+
+void displayArrayTotal() {
+	std::cout << "Total sum of array is: " << arraySum << std::endl;
+}
+
+void diagnalsAreEqual(){
+	std::cout << "Diagnals are EQUAL: \n" << "D1 = " << DiagnalSum1 << " D2 = " << DiagnalSum2 << std::endl;
+}
+
+void diagnalsAreNotEqual() {
+	std::cout << "Diagnals NOT are EQUAL: \n" << "D1 = " << DiagnalSum1 << " D2 = " << DiagnalSum2 << std::endl;
+}
+
+int main() {
+
+	_asm {
+		//part i total sum
+
+		mov ecx, 0;			set ecx and array sum equal to zero
+		mov arraySum, 0;
+
+	sumLoop:
+		cmp ecx, 36;
+		je sumLoopDone;
+
+		mov ebx, [a + ecx];
+		add arraySum, ebx;
+
+		add ecx, 4;
+		jmp sumLoop;
+
+	sumLoopDone:
+		call displayArrayTotal;
+	}
+
+	_asm {
+		// part ii
+
+		mov ecx, 0;
+		mov DiagnalSum1, 0;
+		mov DiagnalSum2, 0;
+
+	diagnalLoop1:
+		cmp ecx, 48;
+		je d1Done;
+
+		mov ebx, [a + ecx];
+		add DiagnalSum1, ebx;
+
+		add ecx, 16;
+
+		jmp diagnalLoop1;
+
+	d1Done:
+		mov ecx, 8;
+
+	diagnalLoop2:
+		cmp ecx, 32;
+		je cmpDiagnal;
+
+		mov ebx, [a + ecx];
+		add DiagnalSum2, ebx;
+
+		add ecx, 8;
+
+		jmp diagnalLoop2;
+
+	cmpDiagnal:
+		mov eax, DiagnalSum1
+		cmp eax, DiagnalSum2;
+		jne notSameSum;
+
+		call diagnalsAreEqual;
+		jmp donee;
+
+	notSameSum:
+		call diagnalsAreNotEqual;
+
+	donee:
+
+	}
+
+	return 0;
+}
